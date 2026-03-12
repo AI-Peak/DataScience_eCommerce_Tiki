@@ -13,7 +13,7 @@ WITH base AS (
 SELECT 
     category,
     COUNT(*) AS product_count,
-    ROUND(AVG(price),2) AS avg_price,
+    CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price,
     ROUND(AVG(discount_rate),4) AS avg_discount_rate,
     ROUND(AVG(rating_average),2) AS avg_rating,
     SUM(reviews_count) AS total_reviews,
@@ -22,7 +22,7 @@ FROM base
 GROUP BY category
 ORDER BY product_count DESC;
 
---2. Phân tích phân bổ GMV proxy theo category (kiểm tra 80/20)
+--2. Phân tích phân bổ GMV proxy theo category 
 WITH gmv_table AS (
     SELECT 
         category,
@@ -86,7 +86,7 @@ SELECT
         ELSE 'Non Best Seller'
     END seller_group,
     COUNT(*) product_count,
-    ROUND(AVG(price),2) avg_price,
+    CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price,
     ROUND(AVG(discount_rate),4) avg_discount,
     ROUND(AVG(rating_average),2) avg_rating,
     ROUND(AVG(reviews_count),2) avg_reviews
@@ -97,7 +97,7 @@ GROUP BY
         ELSE 'Non Best Seller'
     END; 
 
---6. So sánh quantity_sold theo inventory_status
+--6. Phân tích sự khác biệt về số lượng sản phẩm đã bán giữa các nhóm tình trạng tồn kho.
 SELECT 
     inventory_status,
     COUNT(*) product_count,
@@ -105,10 +105,6 @@ SELECT
 FROM products_clean
 GROUP BY inventory_status
 ORDER BY avg_quantity_sold DESC;
-
-SELECT COLUMN_NAME
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'products_clean';
 
 --7. Phân tích ảnh hưởng của tuổi sản phẩm đến hiệu suất bán hàng
 WITH age_group AS (
@@ -144,7 +140,7 @@ SELECT
         ELSE 'Non Authentic'
     END authentic_group,
     COUNT(*) product_count,
-    ROUND(AVG(price),2) avg_price,
+    CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price,
     ROUND(AVG(quantity_sold),0) avg_quantity_sold,
     ROUND(AVG(rating_average),2) avg_rating,
     ROUND(AVG(discount_rate),4) avg_discount
@@ -183,7 +179,7 @@ SELECT
         ELSE 'No FreeShip'
     END freeship_group,
     COUNT(*) product_count,
-    ROUND(AVG(price),2) avg_price,
+    CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price,
     ROUND(AVG(quantity_sold),0) avg_quantity_sold,
     ROUND(AVG(discount_rate),4) avg_discount
 FROM products_clean
