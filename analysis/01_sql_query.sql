@@ -54,7 +54,7 @@ SELECT
     CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price,
     ROUND(AVG(discount_rate),4) avg_discount,
     ROUND(AVG(rating_average),2) avg_rating,
-    ROUND(AVG(reviews_count),2) avg_reviews
+    CAST(AVG(CAST(reviews_count AS FLOAT)) AS DECIMAL(18,2)) AS avg_reviews
 FROM ranked
 GROUP BY 
     CASE 
@@ -78,7 +78,7 @@ SELECT
     COUNT(*) product_count,
     ROUND(AVG(quantity_sold),0) avg_quantity_sold,
     ROUND(AVG(reviews_count),0) avg_reviews,
-    ROUND(AVG(price),2) avg_price
+    CAST(AVG(CAST(price AS DECIMAL(18,2)))AS DECIMAL(18,2)) AS avg_price
 FROM rating_group
 GROUP BY rating_bin
 ORDER BY avg_quantity_sold DESC;
